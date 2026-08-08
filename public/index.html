@@ -3,77 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Electronics - Premium Store</title>
-    <meta name="description" content="Discover premium electronics with Nexus.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Nexus Electronics - Customer Portal</title>
+    <meta name="description" content="Nexus Electronics Store - Live demo with @ravyn-team/node npm package telemetry tracking.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="toast-container"></div>
     
+    <!-- Top Navigation Bar -->
     <nav class="navbar">
         <div class="logo">
             <div class="logo-icon"></div>
-            <h1>Nexus</h1>
+            <h1>Nexus Portal</h1>
+            <span class="npm-badge">@ravyn-team/node@0.1.2</span>
         </div>
         <div class="nav-links">
-            <button class="nav-btn" id="view-orders-btn">My Orders</button>
-            <div class="cart-icon" id="cart-total-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span class="cart-badge">3</span>
+            <button class="nav-btn text-btn page-link active" data-page="page-login" id="nav-login-btn">Sign In</button>
+            <button class="nav-btn text-btn page-link" data-page="page-signup" id="nav-signup-btn">Sign Up</button>
+            
+            <!-- Logged in Session Controls -->
+            <div id="session-controls" class="session-controls hidden">
+                <span class="session-indicator">
+                    <span class="dot"></span>
+                    <span id="user-display-name">Alice Smith</span>
+                </span>
+                <button class="nav-btn primary-nav-btn page-link" data-page="page-dashboard" id="nav-dash-btn">Dashboard</button>
+                <button class="nav-btn text-btn" id="logout-btn">Sign Out</button>
             </div>
         </div>
     </nav>
 
-    <main class="container">
-        <header class="hero">
-            <div class="hero-content">
-                <h2>The Future of Audio</h2>
-                <p>Experience crystal-clear sound with our latest premium headphones, now with active noise cancellation.</p>
-                <button class="primary-btn" id="featured-btn">View Featured Product</button>
-            </div>
-        </header>
-
-        <section class="grid-section">
-            <div class="card registration-card">
-                <h3>Join Nexus</h3>
-                <p>Create an account to track your orders.</p>
-                <form id="register-form">
-                    <div class="input-group">
-                        <input type="text" id="reg-name" placeholder="Full Name" required>
+    <main class="main-content">
+        <!-- PAGE 1: SIGN IN VIEW -->
+        <section id="page-login" class="page-view active">
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to access your dashboard and manage orders.</p>
                     </div>
-                    <div class="input-group">
-                        <input type="email" id="reg-email" placeholder="Email Address" required>
+                    <form id="login-form">
+                        <div class="input-group">
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" value="alice@example.com" placeholder="e.g. alice@example.com" required>
+                        </div>
+                        <button type="submit" class="primary-btn w-full">Sign In to Account</button>
+                    </form>
+                    <div class="auth-footer">
+                        <p>Don't have an account yet? <a href="#" class="switch-page" data-target="page-signup">Create an Account</a></p>
                     </div>
-                    <button type="submit" class="secondary-btn w-full">Create Account</button>
-                </form>
-            </div>
-
-            <div class="card checkout-card">
-                <h3>Quick Checkout</h3>
-                <p>Complete your purchase securely.</p>
-                <div class="price-summary">
-                    <span>Total:</span>
-                    <span class="price-value">$999.00</span>
                 </div>
-                <button class="primary-btn w-full pulse-animation" id="checkout-btn">Pay Now</button>
             </div>
         </section>
 
-        <!-- Response Data Display Area -->
-        <section class="terminal-card">
-            <div class="terminal-header">
-                <div class="terminal-dots">
-                    <span></span><span></span><span></span>
+        <!-- PAGE 2: SIGN UP VIEW -->
+        <section id="page-signup" class="page-view">
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <h2>Create Account</h2>
+                        <p>Register a new account or test duplicate email error handling.</p>
+                    </div>
+                    <form id="signup-form">
+                        <div class="input-group">
+                            <label for="signup-name">Full Name</label>
+                            <input type="text" id="signup-name" placeholder="e.g. Sarah Connor" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="signup-email">Email Address</label>
+                            <input type="email" id="signup-email" placeholder="e.g. sarah@example.com" required>
+                        </div>
+                        <button type="submit" class="primary-btn w-full">Complete Registration</button>
+                    </form>
+                    
+                    <div class="divider"><span>OR DEMO EXCEPTION</span></div>
+
+                    <button type="button" id="trigger-duplicate-btn" class="danger-btn w-full">
+                        ⚠️ Test Duplicate Email Registration (alice@example.com)
+                    </button>
+
+                    <div class="auth-footer">
+                        <p>Already registered? <a href="#" class="switch-page" data-target="page-login">Sign In instead</a></p>
+                    </div>
                 </div>
-                <span>Server Response</span>
             </div>
-            <pre id="response-output">Awaiting user interaction...</pre>
         </section>
+
+        <!-- PAGE 3: DASHBOARD VIEW -->
+        <section id="page-dashboard" class="page-view">
+            <div class="container">
+                <!-- Welcome Banner -->
+                <header class="dash-hero">
+                    <div class="dash-welcome">
+                        <span class="welcome-tag">Account Dashboard</span>
+                        <h2>Hello, <span id="dash-user-name">Alice Smith</span> 👋</h2>
+                        <p>Logged in email: <strong id="dash-user-email">alice@example.com</strong></p>
+                    </div>
+                    <div class="dash-stats">
+                        <div class="stat-card">
+                            <span class="stat-value" id="dash-orders-count">1,000</span>
+                            <span class="stat-label">Total Orders</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" style="color:#10b981;">Active</span>
+                            <span class="stat-label">Account Status</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Dashboard Action Buttons -->
+                <div class="dash-grid">
+                    <!-- Action Card 1: See My All Orders -->
+                    <div class="dash-card card-orders">
+                        <div class="card-icon">📦</div>
+                        <h3>See My All Orders</h3>
+                        <p>Retrieve and browse all <strong>1,000 seeded orders</strong> with full product items. Triggers heavy SQL query performance spans in Ravyn SDK.</p>
+                        <button class="primary-btn w-full" id="btn-dash-orders">
+                            📋 View All 1,000 Orders
+                        </button>
+                    </div>
+
+                    <!-- Action Card 2: Make Checkout -->
+                    <div class="dash-card card-checkout">
+                        <div class="card-icon">💳</div>
+                        <h3>Make Checkout</h3>
+                        <p>Simulate buying a Nexus Pro Tech Item ($999.00). Executes async payment processing and records transaction telemetry.</p>
+                        <button class="primary-btn w-full" id="btn-dash-checkout">
+                            🛒 Process New Checkout ($999.00)
+                        </button>
+                    </div>
+
+                    <!-- Action Card 3: Trigger Ravyn Error -->
+                    <div class="dash-card card-error">
+                        <div class="card-icon">💥</div>
+                        <h3>Trigger Telemetry Exception</h3>
+                        <p>Simulate an unhandled 500 server exception to test Ravyn SDK automatic error capturing and stack trace logging.</p>
+                        <button class="danger-btn w-full" id="btn-dash-error">
+                            🔥 Trigger 500 Server Error
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: MY ORDERS LIST VIEW -->
+        <section id="page-orders" class="page-view">
+            <div class="container">
+                <div class="orders-page-header">
+                    <div>
+                        <button class="back-btn switch-page" data-target="page-dashboard">← Back to Dashboard</button>
+                        <h2>My Orders (<span id="orders-count-title">0</span> Total)</h2>
+                        <p id="orders-timing-badge" class="query-time-tag">Query execution duration: -- ms</p>
+                    </div>
+                </div>
+
+                <div id="orders-list-container" class="orders-list">
+                    <!-- Orders dynamically rendered -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Terminal Output Viewer -->
+        <div class="container">
+            <section class="terminal-card">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span>API Logs & Telemetry Stream</span>
+                    <button id="clear-log-btn" class="clear-log-btn">Clear Logs</button>
+                </div>
+                <pre id="response-output">Awaiting user interaction...</pre>
+            </section>
+        </div>
     </main>
 
     <script src="app.js"></script>
