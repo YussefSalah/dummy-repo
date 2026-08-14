@@ -1,17 +1,7 @@
-// src/main.ts
-import { init } from "@ravyn-team/node";
-
-init({
-  dsn: "https://a054bad0878fc6c4d421e9ff5b57752e@ingest.ravyn-team.me/ingest/telemetry",
-  service: "nestjs-project-603",
-  environment: "development",
-});
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, BadRequestException, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { RavynExceptionFilter } from './ravyn-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,7 +14,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-    app.useGlobalFilters(new RavynExceptionFilter());
 
 
   const config = new DocumentBuilder()
