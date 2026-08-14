@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.next/
+.env
+coverage/
+build/
+
+# Ignore frontend completely
+frontend/
+test-bug.js
