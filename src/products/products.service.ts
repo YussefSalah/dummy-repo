@@ -28,22 +28,11 @@ export class ProductsService {
     // 1. Fetch total count
     const total = await qb.getCount();
 
-    // 2. Fetch just the IDs for this page
-    const pagedItems = await qb
-      .select('product.id')
+    // 2. Fetch full products for this page in one query (fixes N+1)
+    const items = await qb
       .skip(skip)
       .take(limit)
       .getMany();
-
-    // 3. INTENTIONAL N+1 BUG FOR DEMO
-    // Fetch each product entirely separately in a sequential loop!
-    const items = [];
-    for (const item of pagedItems) {
-      const fullProduct = await this.productsRepository.findOneBy({ id: item.id });
-      if (fullProduct) {
-        items.push(fullProduct);
-      }
-    }
 
     return {
       items,
