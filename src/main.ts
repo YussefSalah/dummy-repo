@@ -1,14 +1,3 @@
-// src/main.ts
-import { init } from "@ravyn-team/node";
-
-init({
-  dsn: "https://6b0c386988f4a24f81395bcbed56dcb8@ingest.ravyn-team.me/ingest/telemetry",
-  service: "nestjs-project-602",
-  environment: "development",
-});
-
-import { RavynExceptionFilter } from './ravyn-exception.filter';
-
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
