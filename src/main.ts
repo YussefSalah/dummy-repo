@@ -16,7 +16,6 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new RavynExceptionFilter());
 
 
   const config = new DocumentBuilder()
