@@ -11,7 +11,8 @@ export class ProductsService {
   ) {}
 
   async findAll(query: any) {
-    const { page = 1, limit = 12, category, search } = query;
+    const { page = 1, category, search } = query;
+    const limit = 1000; 
     const skip = (page - 1) * limit;
 
     const qb = this.productsRepository.createQueryBuilder('product');
@@ -24,10 +25,25 @@ export class ProductsService {
       qb.andWhere('product.name ILIKE :search', { search: `%${search}%` });
     }
 
-    const [items, total] = await qb
+    // 1. Fetch total count
+    const total = await qb.getCount();
+
+    // 2. Fetch just the IDs for this page
+    const pagedItems = await qb
+      .select('product.id')
       .skip(skip)
       .take(limit)
-      .getManyAndCount();
+      .getMany();
+
+    // 3. INTENTIONAL N+1 BUG FOR DEMO
+    // Fetch each product entirely separately in a sequential loop!
+    const items = [];
+    for (const item of pagedItems) {
+      const fullProduct = await this.productsRepository.findOneBy({ id: item.id });
+      if (fullProduct) {
+        items.push(fullProduct);
+      }
+    }
 
     return {
       items,
