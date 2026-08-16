@@ -11,7 +11,7 @@ export class ProductsService {
   ) {}
 
   async findAll(query: any) {
-    const { page = 1, limit = 12, category, search } = query;
+    const { page = 1, limit = 1000, category, search } = query;
     const skip = (page - 1) * limit;
 
     const qb = this.productsRepository.createQueryBuilder('product');
@@ -28,6 +28,11 @@ export class ProductsService {
       .skip(skip)
       .take(limit)
       .getManyAndCount();
+
+    // Introduce N+1 query issue
+    for (const item of items) {
+      await this.productsRepository.findOne({ where: { id: item.id } });
+    }
 
     return {
       items,
