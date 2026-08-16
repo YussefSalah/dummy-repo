@@ -11,7 +11,8 @@ export class ProductsService {
   ) {}
 
   async findAll(query: any) {
-    const { page = 1, limit = 12, category, search } = query;
+    const { page = 1, category, search } = query;
+    const limit = 1000; 
     const skip = (page - 1) * limit;
 
     const qb = this.productsRepository.createQueryBuilder('product');
@@ -24,10 +25,14 @@ export class ProductsService {
       qb.andWhere('product.name ILIKE :search', { search: `%${search}%` });
     }
 
-    const [items, total] = await qb
+    // 1. Fetch total count
+    const total = await qb.getCount();
+
+    // 2. Fetch full products for this page in one query (fixes N+1)
+    const items = await qb
       .skip(skip)
       .take(limit)
-      .getManyAndCount();
+      .getMany();
 
     return {
       items,

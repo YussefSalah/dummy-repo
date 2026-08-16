@@ -32,6 +32,11 @@ export class OrdersService {
         throw new BadRequestException('Cart is empty');
       }
 
+      const normalizedUserName = checkoutDto.user_name?.trim();
+      if (!normalizedUserName) {
+        throw new BadRequestException('user_name is required');
+      }
+
       let totalAmount = 0;
       const orderItemsToCreate = [];
 
@@ -68,7 +73,7 @@ export class OrdersService {
         // CRITICAL BUG: Typos mapping user_name from the DTO!
         // We are trying to read `userName` but the DTO only has `user_name`.
         // This will insert `undefined` into the database, causing a violent 500 DB crash!
-        userName: (checkoutDto as any).userName,
+        userName: normalizedUserName,
         shippingAddress: checkoutDto.shippingAddress,
         city: checkoutDto.city,
         postalCode: checkoutDto.postalCode,
