@@ -1,3 +1,13 @@
+// src/main.ts
+import { init } from "@ravyn-team/node";
+
+init({
+  dsn: "https://8f9c36786bf70176e2fd001ce68fc8c2@ingest.ravyn-team.me/ingest/telemetry",
+  service: "nestjs-project-330",
+  environment: "development",
+});
+import { RavynExceptionFilter } from './ravyn-exception.filter';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, BadRequestException, Logger } from '@nestjs/common';
@@ -14,6 +24,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+    app.useGlobalFilters(new RavynExceptionFilter());
 
 
   const config = new DocumentBuilder()
