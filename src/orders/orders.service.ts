@@ -1,6 +1,5 @@
 import { Injectable, BadRequestException, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderItem } from './entities/order-item.entity';
 import { CheckoutDto } from './dto/checkout.dto';
@@ -62,13 +61,15 @@ export class OrdersService {
         await manager.save(product);
       }
 
+      const resolvedUserName = (checkoutDto as any).user_name ?? (checkoutDto as any).userName;
+      if (!resolvedUserName) {
+        throw new BadRequestException('user_name is required');
+      }
+
       const order = manager.create(Order, {
         userId: user.id,
         user: user,
-        // CRITICAL BUG: Typos mapping user_name from the DTO!
-        // We are trying to read `userName` but the DTO only has `user_name`.
-        // This will insert `undefined` into the database, causing a violent 500 DB crash!
-        userName: (checkoutDto as any).userName,
+        userName: resolvedUserName,
         shippingAddress: checkoutDto.shippingAddress,
         city: checkoutDto.city,
         postalCode: checkoutDto.postalCode,
