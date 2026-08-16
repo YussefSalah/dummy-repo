@@ -61,7 +61,7 @@ export class OrdersService {
         await manager.save(product);
       }
 
-      const resolvedUserName = (checkoutDto as any).user_name ?? (checkoutDto as any).userName;
+      const resolvedUserName = checkoutDto.user_name?.trim();
       if (!resolvedUserName) {
         throw new BadRequestException('user_name is required');
       }
