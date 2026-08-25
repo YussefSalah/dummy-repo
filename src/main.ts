@@ -2,7 +2,7 @@
 import { init } from "@ravyn-team/node";
 
 init({
-  dsn: "https://8f9c36786bf70176e2fd001ce68fc8c2@ingest.ravyn-team.me/ingest/telemetry",
+  dsn: "https://1f4fc1781c1a91ef115a5691a3225eb8@ingest.ravyn-team.me/ingest/telemetry",
   service: "nestjs-project-330",
   environment: "development",
 });
@@ -15,7 +15,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
@@ -26,6 +26,7 @@ async function bootstrap() {
   );
 
     app.useGlobalFilters(new RavynExceptionFilter());
+
 
 
   const config = new DocumentBuilder()
